@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel File</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        #fileUploadContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #extractedInfo {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #D3D3D3;
+            text-align: left;
+        }
+
+        #extractedInfo p {
+            margin-bottom: 10px;
+        }
+
+        #extractedInfo p span {
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #FFD100;
+            color: #333333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FFDF7F;
+        }
+
+
+        input[type="file"] {
+
+            margin-bottom: 10px;
+        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  header {
+    background-color: #333;
+    color: #ffd100;
+    text-align: center;
+    padding: 15px 0;
+  }
+  nav {
+    background-color: #ffd100;
+    padding: 10px;
+    text-align: center;
+  }
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  section {
+    padding: 20px;
+    margin-bottom: 50px; /* Added margin to push footer down */
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #333;
+    color: #ffd100;
+  }
+  tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+        /* Style for the button to open the uploaded file */
+        #openFileButton {
+            background-color: #808080; /* Gray color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        #openFileButton:hover {
+            background-color: #cccc00; /* Yellow color */
+        }
+         footer {
+    background-color: #333333;
+    color: #FFD100;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+    </style>
+</head>
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+<body>
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+<h1>P&L Analysis</h1>
+
+<div id="fileUploadContainer">
+    <input type="file" id="fileInput">
+    <button onclick="handleUpload()">Upload</button>
+</div>
+<div id="extractedInfo"></div>
+
+<script>
+    function handleUpload() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/extract_info', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var infoDiv = document.getElementById('extractedInfo');
+                    infoDiv.innerHTML = '';
+                    for (var key in response) {
+                        var paragraph = document.createElement('p');
+                        paragraph.innerHTML = '<span>' + key + ':</span> ' + response[key];
+                        infoDiv.appendChild(paragraph);
+                    }
+                } else {
+                    alert('Error extracting information');
+                }
+            };
+            xhr.send(formData);
+        } else {
+            alert('Please select a file');
+        }
+    }
+
+    function openUploadedFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+            var fileUrl = URL.createObjectURL(file);
+            window.open(fileUrl);
+        } else {
+            alert('No file uploaded');
+        }
+    }
+</script>
+
+<button id="openFileButton" onclick="openUploadedFile()">Open Uploaded File</button>
+<footer>
+    &copy; 2024 Fastweb Product Marketing Team
+</footer>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+

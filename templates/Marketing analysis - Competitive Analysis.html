@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastweb Template</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+        }
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+        nav .dropdown {
+            display: inline-block;
+        }
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        #quadrant-chart-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #quadrantChart {
+            display: block;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555555;
+        }
+        .chart-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+    <section>
+        <h2>Competitive Chart Quadrant Graph</h2>
+
+        <label for="x-feature">X-Axis Feature:</label>
+        <input type="text" id="x-feature" placeholder="Enter X-Axis Feature">
+
+        <label for="y-feature">Y-Axis Feature:</label>
+        <input type="text" id="y-feature" placeholder="Enter Y-Axis Feature">
+
+        <div id="competitors-container">
+            <!-- Add competitor input fields dynamically here -->
+        </div>
+
+        <button onclick="addCompetitorField()">Add Competitor</button>
+        <button onclick="generateQuadrantGraph()">Generate Quadrant Graph</button>
+        <button onclick="downloadChart()">Download Chart</button>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="document" required>
+        <button type="submit">Upload</button>
+    </form>
+        <div id="quadrant-chart-container">
+            <canvas id="quadrantChart"></canvas>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2024 Fastweb Product Marketing Team
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function generateQuadrantGraph() {
+        var xFeature = document.getElementById('x-feature').value;
+        var yFeature = document.getElementById('y-feature').value;
+
+        var competitors = [];
+        var competitorInputs = document.querySelectorAll('.competitor');
+        competitorInputs.forEach(function (competitorInput) {
+            var name = competitorInput.querySelector('input[name^="competitor-name"]').value;
+            var xScale = parseFloat(competitorInput.querySelector('input[name^="competitor-x-scale"]').value);
+            var yScale = parseFloat(competitorInput.querySelector('input[name^="competitor-y-scale"]').value);
+
+            if (name && !isNaN(xScale) && !isNaN(yScale)) {
+                competitors.push({
+                    label: name,
+                    data: [{
+                        x: xScale,
+                        y: yScale
+                    }]
+                });
+            }
+        });
+
+        var data = {
+            datasets: competitors
+        };
+
+        var options = {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'center',
+                    title: {
+                        display: true,
+                        text: xFeature,
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    position: 'center',
+                    title: {
+                        display: true,
+                        text: yFeature,
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        };
+
+        var ctx = document.getElementById('quadrantChart').getContext('2d');
+
+        var quadrantChart = new Chart(ctx, {
+            type: 'scatter',
+            data: data,
+            options: options
+        });
+    }
+
+    function addCompetitorField() {
+        var competitorsContainer = document.getElementById('competitors-container');
+        var newCompetitorField = document.createElement('div');
+        newCompetitorField.classList.add('competitor');
+
+        newCompetitorField.innerHTML = `
+            <label for="competitor-name-${competitorsContainer.children.length + 1}">Competitor ${competitorsContainer.children.length + 1} Name:</label>
+            <input type="text" name="competitor-name-${competitorsContainer.children.length + 1}" placeholder="Enter Competitor ${competitorsContainer.children.length + 1} Name">
+
+            <label for="competitor-x-scale-${competitorsContainer.children.length + 1}">Competitor ${competitorsContainer.children.length + 1} X-Scale:</label>
+            <input type="number" name="competitor-x-scale-${competitorsContainer.children.length + 1}" placeholder="Enter Competitor ${competitorsContainer.children.length + 1} X-Scale">
+
+            <label for="competitor-y-scale-${competitorsContainer.children.length + 1}">Competitor ${competitorsContainer.children.length + 1} Y-Scale:</label>
+            <input type="number" name="competitor-y-scale-${competitorsContainer.children.length + 1}" placeholder="Enter Competitor ${competitorsContainer.children.length + 1} Y-Scale">
+        `;
+
+        competitorsContainer.appendChild(newCompetitorField);
+    }
+
+    function downloadChart() {
+        var canvas = document.getElementById('quadrantChart');
+        var dataUrl = canvas.toDataURL('image/png');
+
+        var downloadLink = document.createElement('a');
+        downloadLink.href = dataUrl;
+        downloadLink.download = 'quadrant_chart.png';
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

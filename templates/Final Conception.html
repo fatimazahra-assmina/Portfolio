@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+            position: relative;
+        }
+
+        #profile-link {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        #profile-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        nav .dropdown {
+            display: inline-block;
+        }
+
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        section {
+            padding: 20px;
+            text-align: left;
+           background-color: #D3D3D3;
+        }
+
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 7px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Your existing styles */
+
+        /* New styles for the table */
+        #profile-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #profile-table th, #profile-table td {
+            border: 1px solid #333333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #profile-table th {
+            background-color: #FFD100;
+        }
+
+        section#document-repository {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.upload-button {
+            background-color: #FFD100;
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        label.upload-button:hover {
+            background-color: #FEC007;
+        }
+
+        label.upload-button input[type="file"] {
+            display: none;
+        }
+
+        label.upload-button::before {
+            content: "Upload";
+        }
+         section#overview {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        p#product-summary {
+            margin-bottom: 20px;
+        }
+
+        button#generate-summary-button {
+            background-color: #FFD100;
+            color: #333;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button#generate-summary-button:hover {
+            background-color: #FEC007;
+        }
+        section#external-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+        .section-placeholder {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-placeholder h2 {
+            margin-top: 0;
+        }
+
+        .section-placeholder textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+
+<div>
+    <header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+    <div class="container">
+
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+<body>
+
+    <header>
+
+    </header>
+
+    <section>
+        <section id="document-repository">
+        <h2>Documents Repository</h2>
+        <ul>
+            <li><a href="document1.pdf" target="_blank">Market Insights and numbers.docx</a></li>
+            <li><a href="document2.docx" target="_blank">Vendors offers.pdf</a></li>
+            <li><a href="document3.docx" target="_blank">Technical feedback from SOC.pdf</a></li>
+
+                  <li>
+
+                <label class="upload-button">
+                    <input type="file" name="document2" accept=".pdf,.doc,.docx">
+                </label>
+            </li>
+            <!-- Add more documents as needed -->
+  </section>
+ <!-- Add more documents as needed -->
+            <section>
+        <h2>InfoMarketing Space </h2>
+       <a href="https://infomarketing.ofc.fastweb.it/SecurityServices/default.aspx" class="external-link" target="_blank">Access and add info on the Info Marketing space</a>
+    </section>
+      <section>
+        <h2>Concept Summary</h2>
+          <h4>This Part will contain A summary and an overall view about the product extracted and generated by GENAI Transformers and NLP models from all the above pages related to the same product</h4>
+
+    </section>
+    <section>
+        <h2>Key Features</h2>
+        <h4>These features below have been chosen in the Marketing analysis phase </h4>
+            <li><a href="Vendors_analysis">MDM</a>
+            <li><a href="Vendors_analysis">Application Security</a>
+            <li><a href="Vendors_analysis">Reliable Security Software</a>
+            <li><a href="Vendors_analysis">Network Security</a>
+
+            <!-- External content will be inserted here --><section class="section-placeholder">
+
+        <textarea placeholder="Add key features here"></textarea>
+    </section>
+        </div>
+
+    </section>
+
+    <section>
+        <h2>Benefits</h2>
+        <h4>This Part will contain Requirements page insights extracted and generated by GENAI Transformers and NLP models</h4>
+
+        <ul>
+            <li><a href="Req_diag">Increased productivity</a>
+            <li><a href="Req_diag">Cost-effectiveness</a>
+            <li><a href="Req_diag">Improved user experience</a><li>
+            <li><a href="Req_diag">Adaptability to industry trends</a>
+            <!-- Add more benefits as needed -->
+        </ul>
+
+   <section class="section-placeholder">
+
+        <textarea placeholder="Add benefits here"></textarea>
+    </section>
+    </section>
+
+    <section>
+
+        <h2>How It Works (Draft)</h2>
+        <h4>This Part will contain Requirements page Technical insights extracted and generated by GENAI Transformers and NLP models</h4>
+
+        <p>This mobile security Product utilizes cutting-edge "cited-technology" to seamlessly integrate with your existing workflows. Its intuitive design ensures a smooth user experience, and the robust features empower you to [cited-functionalities].</p>
+
+    </section>
+    <section>
+        <h2>Key Vendors </h2>
+        <h4>This Part will contain Vendors Analysis page insights extracted and generated by GENAI Transformers and NLP models</h4>
+
+        <section class="section-placeholder">
+
+        <textarea placeholder="Add information about key partners here"></textarea>
+    </section>
+            <!-- External content will be inserted here -->
+        </div>
+        <!-- Add a demo video or any other visual representation as needed -->
+     <section>
+
+            <button class="download-button" onclick="downloadFile()">Download</button>
+
+    </section>
+    <footer>
+        &copy; 2024 Fastweb Product Marketing Team
+    </footer>
+    <script>
+// Function to update the chart in the Benefits section
+function updateChartInBenefitsSection(chartDataURL) {
+    // Create an <img> element to display the chart
+    var chartImg = document.createElement('img');
+    chartImg.src = chartDataURL;
+
+    // Get the placeholder div in the Benefits section
+    var chartPlaceholder = document.getElementById('chartPlaceholder');
+
+    // Clear any existing content in the placeholder
+    chartPlaceholder.innerHTML = '';
+
+    // Append the chart image to the placeholder
+    chartPlaceholder.appendChild(chartImg);
+}
+
+// Example usage:
+// Call the updateChartInBenefitsSection function with the data URL of the chart
+var chartDataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAABnCAIAAADQRXm0AAAAIklEQVR42mP4z8AARIYB/+v8QeUD/9i4oSgwCwKhECwQqjAPiN+ixwiABaQIABo0A6f8D0zI0cQAAAABJRU5ErkJggg==';
+updateChartInBenefitsSection(chartDataURL);
+    function displayExternalContent() {
+        var externalContentUrl = 'Req_diag'; // Specify the URL of the external page
+        var externalContentPlaceholder = document.getElementById("external-content-placeholder");
+
+        // Fetch the content of the external page
+        fetch(externalContentUrl)
+            .then(response => response.text())
+            .then(data => {
+                // Insert the fetched content into the placeholder div
+                externalContentPlaceholder.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching external content:', error);
+                externalContentPlaceholder.textContent = 'Failed to load external content.';
+            });
+    }
+
+    // Call the function to display external content when the page loads
+    window.addEventListener('load', displayExternalContent);
+     function displayExternalContent1() {
+        var externalContentUrl1 = 'Vendors_analysis'; // Specify the URL of the external page
+        var externalContentPlaceholder1 = document.getElementById("external-content-placeholder1");
+
+        // Fetch the content of the external page
+        fetch(externalContentUrl1)
+            .then(response => response.text())
+            .then(data => {
+                // Insert the fetched content into the placeholder div
+                externalContentPlaceholder1.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching external content:', error);
+                externalContentPlaceholder1.textContent = 'Failed to load external content.';
+            });
+    }
+
+    // Call the function to display external content when the page loads
+    window.addEventListener('load', displayExternalContent1);
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+

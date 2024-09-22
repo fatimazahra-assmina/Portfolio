@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        #profile-section img {
+        width: 100px; /* Adjust size as needed */
+        height: 100px; /* Adjust size as needed */
+        border-radius: 50%; /* Make the image round */
+        object-fit: cover; /* Ensure the image fills the container */
+        border: 2px solid #fff; /* Add a white border for better visibility */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow effect */
+    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+            position: relative;
+        }
+
+        #profile-link {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        #profile-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        nav .dropdown {
+            display: inline-block;
+        }
+
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        section {
+            padding: 20px;
+            text-align: left;
+           background-color: #D3D3D3;
+        }
+
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Your existing styles */
+
+        /* New styles for the table */
+        #profile-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #profile-table th, #profile-table td {
+            border: 1px solid #333333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #profile-table th {
+            background-color: #FFD100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+  <header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+        <section id="profile-section">
+            <img src="{{ url_for('static', filename='Profile-Gab.png') }}" alt="Profile Picture">
+
+            <div class="profile-info">
+                <strong>Name:</strong> Gabriele
+            </div>
+            <div class="profile-info">
+                <strong>Surname:</strong> Scialò
+            </div>
+            <div class="profile-info">
+                <strong>Email:</strong> gabriele.scialo@fastweb.it
+            </div>
+            <div class="profile-info">
+                <strong>Phone:</strong> +393756977404
+
+                <div class="profile-info">
+                <strong>Role:</strong> Product Marketing Professional
+            </div>
+
+
+ <table id="profile-table">
+            <thead>
+            <tr>
+                <th>Owned Products</th>
+                <th>Interested in</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Product rows -->
+            <tr>
+                <td> Fast security 360 </td>
+                <td> BlockChain </td>
+            </tr>
+              <tr>
+                <td> Fast KaleiDos </td>
+                <td> Artificial Intelligence </td>
+            </tr>
+              <tr>
+                <td> Fast Secure VPN </td>
+                <td> Marketing insights </td>
+            </tr>
+              <tr>
+                <td> Advanced Protection </td>
+                <td> Strategy </td>
+            </tr>
+             <tr>
+                <td> Fast SIEM </td>
+                <td></td>
+            </tr>
+             <tr>
+                <td> Mail Security </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> DefenderAI </td>
+                <td></td>
+            </tr>
+
+             <tr>
+                <td> CNAPP </td>
+                <td></td>
+            </tr>
+            <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+</section>
+
+    <!-- Separate section for Messages and Alerts -->
+    <section id="messages-alerts-section">
+        <h2>Messages </h2>
+        <p>You have one new task from @Competence center </p>
+          <h2>Alerts</h2>
+        <p>No alerts </p>
+    </section>
+        <footer>
+            &copy; 2024 Fastweb Product Marketing Team
+        </footer>
+
+    </div>
+
+    <script>
+        // Your existing JavaScript code
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+

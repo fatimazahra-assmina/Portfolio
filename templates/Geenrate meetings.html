@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastweb Template</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+        }
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+        nav .dropdown {
+            display: inline-block;
+        }
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #FFD100;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+        button {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555555;
+        }
+        input[type="date"],
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+    <section>
+        <h2>Generate Meeting</h2>
+        <div>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+
+        <div>
+            <label for="productSubject">Product Subject:</label>
+            <input type="text" id="productSubject" placeholder="Enter the subject of the product">
+        </div>
+
+        <div>
+            <label for="team">Teams:</label>
+            <select id="team" multiple>
+                <option value="ProductMarketing">Product Marketing</option>
+                <option value="GTM">GTM</option>
+                <option value="ExperienceDesign">Experience Design</option>
+                <option value="BI">BI</option>
+                <option value="CompetenceCenter">Competence Center</option>
+            </select>
+        </div>
+<div>
+    <label for="meetingDate">Meeting Date:</label>
+    <input type="date" id="meetingDate">
+</div>
+
+<div>
+    <label for="meetingTime">Meeting Time:</label>
+    <input type="time" id="meetingTime">
+</div>
+
+<div id="message"></div>
+        <div>
+            <button onclick="generateLink()">Generate Meeting Link</button>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2024 Fastweb Product Marketing Team
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+   function generateLink() {
+    var name = document.getElementById('name').value;
+    var productSubject = document.getElementById('productSubject').value;
+    var selectedTeams = [];
+    var teamsDropdown = document.getElementById('team');
+    var meetingDate = document.getElementById('meetingDate').value; // Get the meeting date from the input field
+    var meetingTime = document.getElementById('meetingTime').value; // Get the meeting time from the input field
+
+    for (var i = 0; i < teamsDropdown.options.length; i++) {
+        if (teamsDropdown.options[i].selected) {
+            selectedTeams.push(teamsDropdown.options[i].value);
+        }
+    }
+
+    if (selectedTeams.length === 0 || !meetingDate || !meetingTime) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    var message = `I'm ${name} and I'm in the Product Marketing team. I want to create a product, so I want a meeting with:`;
+
+    selectedTeams.forEach(team => {
+        message += ` ${team},`;
+    });
+
+    message = message.slice(0, -1); // Remove the trailing comma
+
+    var emailAddresses = selectedTeams.map(team => `${team}@fatsweb.it`).join(',');
+
+    // Construct the meeting date and time string
+    var meetingDateTime = new Date(meetingDate + ' ' + meetingTime);
+    var formattedMeetingDateTime = meetingDateTime.toLocaleString();
+
+    var mailtoLink = `mailto:${emailAddresses}?subject=${encodeURIComponent(productSubject)} - Meeting Request from ${name}&body=${encodeURIComponent(message + '\n\nMeeting Date and Time: ' + formattedMeetingDateTime)}`;
+
+    document.getElementById('message').innerHTML = `<p>${message}</p><p><a href="${mailtoLink}">Click here to send the meeting request</a></p>`;
+
+    // Add a new row to the table
+    var table = document.getElementById("meetingTable").getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    var cols = ["product_name", "meeting_date", "meeting_title", "meeting_link", "summary", "related_documents"];
+    for (var i = 0; i < cols.length; i++) {
+        var cell = newRow.insertCell(i);
+        if (i === 0) {
+            cell.textContent = productSubject;
+        } else if (i === 1) {
+            cell.textContent = formattedMeetingDateTime;
+        } else if (i === 2) {
+        cell.innerHTML = `<input type="text" name="meeting_title" placeholder="Enter meeting title">`;
+
+        } else if (i === 3) {
+               cell.innerHTML = `<a href="https://teams.microsoft.com/l/meeting/new" target="_blank">Schedule Meeting</a>`;
+        } else if (i === 4 || i === 5) {
+            cell.innerHTML = `<input type="file" name="${cols[i]}" accept=".pdf,.doc,.docx">`;
+        }
+    }
+}
+
+    function scheduleMeeting(event) {
+        event.preventDefault(); // Prevent the default action of the link
+        var teamsUrl = 'https://teams.microsoft.com/l/meeting/new';
+
+        // Redirect the user to the Teams meeting scheduling page
+        window.location.href = teamsUrl;
+    }
+    function addRow() {
+        console.log("Adding row...");
+        var table = document.getElementById("meetingTable").getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow(table.rows.length); // Insert after the last row
+        var cols = ["user_product_name", "user_meeting_date", "user_meeting_title", "user_meeting_link", "user_summary", "user_related_documents"];
+        for (var i = 0; i < cols.length; i++) {
+            var cell = newRow.insertCell(i);
+            if (i === 1) {
+                cell.innerHTML = '<input type="date" name="' + cols[i] + '">';
+            } else if (i === 4 || i === 5) {
+                cell.innerHTML = '<input type="file" name="' + cols[i] + '" accept=".pdf,.doc,.docx">';
+            } else if (i === 3) {
+                cell.innerHTML = '<a href="#" onclick="scheduleMeeting()">Schedule Meeting</a>';
+            } else {
+                cell.innerHTML = '<input type="text" name="' + cols[i] + '" placeholder="Enter ' + cols[i].replace('_', ' ') + '">';
+            }
+        }
+    }
+
+    function scheduleMeeting() {
+        var teamsUrl = 'https://teams.microsoft.com/l/meeting/new';
+
+        // Redirect the user to the Teams meeting scheduling page
+        window.location.href = teamsUrl;
+    }
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+

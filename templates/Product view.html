@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastweb Product Information</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #ffd100;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        nav {
+            background-color: #ffd100;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        section {
+            padding: 20px;
+            margin-bottom: 50px; /* Added margin to push footer down */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #ffd100;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+                .search-bar {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffd100;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #search-button:hover {
+            background-color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+
+<section>
+    <h2>Product Information</h2>
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Type your request here">
+        <button id="search-button" onclick="searchInfo()">Search</button>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Product concept</th>
+            <th>Level of Conception</th>
+            <th>Owner</th>
+            <th>Requested Action/Alert</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Data will be populated here -->
+        </tbody>
+<tfoot>
+    <tr id="user-input-row">
+        <td><input type="text" id="user-product"></td>
+        <td>
+            <select id="user-level">
+                <option value="Brainstorming phase">Brainstorming phase</option>
+                <option value="Marketing Analysis phase">Marketing Analysis phase</option>
+                 <option value="Requirements phase">Requirements phase</option>
+                 <option value="Final conception phase">Final conception phase</option>
+                <!-- Add more options as needed -->
+            </select>
+        </td>
+        <td><input type="text" id="user-owner"></td>
+        <td><input type="text" id="user-action"></td>
+        <td><button onclick="addUserInput()">Add</button></td>
+    </tr>
+</tfoot>
+    </table>
+</section>
+
+<footer>
+    &copy; 2024 Fastweb Product Marketing Team
+</footer>
+
+<script>
+    const products = [
+        { product: "DefenderAI", level: "Final conception phase", owner: "Gabriele Scialò", action: "No requested actions" },
+        { product: "Mobile Security", level: "Marketing Analysis phase", owner: "Gabriele Scialò & Nicola Pignatelli", action: "Have Mobile Data @BI Team" },
+
+        // Add more products as needed
+    ];
+
+    function searchInfo() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const allProducts = [...products, ...getNewRowsData()]; // Merge existing products and new rows
+    const filteredProducts = allProducts.filter(product =>
+        product.product.toLowerCase().includes(searchTerm) ||
+        product.owner.toLowerCase().includes(searchTerm)
+    );
+    populateTable(filteredProducts);
+}
+
+function getNewRowsData() {
+    const newRows = document.querySelectorAll('#table-body tr:not(#user-input-row)');
+    const newData = [];
+    newRows.forEach(row => {
+        const product = row.querySelector('td:nth-child(1)').textContent;
+        const level = row.querySelector('td:nth-child(2)').textContent;
+        const owner = row.querySelector('td:nth-child(3)').textContent;
+        const action = row.querySelector('td:nth-child(4)').textContent;
+        newData.push({ product, level, owner, action });
+    });
+    return newData;
+}
+
+
+    function populateTable(products) {
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = ''; // Clear previous contents
+
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.product}</td>
+                <td>${product.level}</td>
+                <td>${product.owner}</td>
+                <td>${product.action}</td>
+            `;
+            row.onclick = () => navigateToProductPage('timeline_page');
+            tableBody.appendChild(row);
+        });
+    }
+
+    function navigateToProductPage(productPageUrl) {
+        window.location.href = productPageUrl;
+    }
+
+    // Initial population of table with all products
+    populateTable(products);
+
+    function addUserInput() {
+        const product = document.getElementById('user-product').value;
+        const level = document.getElementById('user-level').value;
+        const owner = document.getElementById('user-owner').value;
+        const action = document.getElementById('user-action').value;
+
+        // Validate if any input is empty
+        if (!product || !level || !owner || !action) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Add the user input as a new row
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${product}</td>
+            <td>${level}</td>
+            <td>${owner}</td>
+            <td>${action}</td>
+        `;
+        document.getElementById('table-body').appendChild(newRow);
+
+        // Clear the input fields
+        document.getElementById('user-product').value = '';
+        document.getElementById('user-level').value = '';
+        document.getElementById('user-owner').value = '';
+        document.getElementById('user-action').value = '';
+    }
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+
+

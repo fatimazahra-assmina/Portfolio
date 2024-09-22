@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <style>
+      body {
+          font-family: Roboto, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+      }
+
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+      }
+
+      header {
+          background-color: #333333;
+          padding: 15px;
+          color: #FFD100;
+          text-align: center;
+          position: relative;
+      }
+
+      #profile-link {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+      }
+
+      #profile-icon {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          object-fit: cover;
+      }
+
+      nav {
+          background-color: #FFD100;
+          padding: 10px;
+          text-align: center;
+      }
+
+      nav a {
+          margin: 0 10px;
+          text-decoration: none;
+          color: #333333;
+          font-weight: bold;
+      }
+
+      nav .dropdown {
+          display: inline-block;
+      }
+
+      nav .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+      }
+
+      nav .dropdown:hover .dropdown-content {
+          display: block;
+      }
+
+      nav .dropdown-content a {
+          color: #333333;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+
+      section {
+          padding: 20px;
+          text-align: left;
+         background-color: #D3D3D3;
+      }
+
+      footer {
+          background-color: #333333;
+          color: #FFD100;
+          padding: 10px;
+          text-align: center;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+      }
+
+      /* Your existing styles */
+
+      /* New styles for the table */
+      #profile-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+      }
+
+      #profile-table th, #profile-table td {
+          border: 1px solid #333333;
+          padding: 10px;
+          text-align: left;
+      }
+
+      #profile-table th {
+          background-color: #FFD100;
+      }
+
+      /* New style for diagram image */
+      #diagram-image {
+          display: none;
+          max-width: 100%;
+          margin-top: 20px;
+      }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+<section>
+<p><label for="marketingRequirements">Business Requirements:</label>
+<textarea id="marketingRequirements" placeholder="Business Requirement 1&#10;Business Requirement 2&#10;..."> </textarea></p>
+
+<label for="techRequirements">Tech Requirements:</label>
+<textarea id="techRequirements" placeholder="Tech Requirement 1&#10;Tech Requirement 2&#10;..."></textarea>
+
+<!-- Button to generate diagram -->
+<button onclick="generateDiagram()">Generate Diagram</button>
+
+<!-- Image placeholder for the diagram -->
+<img id="diagram-image" src="{{ url_for('static', filename='Sysml_example.png') }}" alt="Chatbot Icon" ;">
+
+</section>
+
+<footer>
+    &copy; 2024 Fastweb Product Marketing Team
+</footer>
+
+</div>
+
+<script>
+function generateDiagram() {
+    var marketingRequirements = document.getElementById('marketingRequirements').value;
+    var techRequirements = document.getElementById('techRequirements').value;
+
+    // Split the business requirements by line breaks
+    var marketingRequirementsArray = marketingRequirements.split(/\r?\n/);
+
+    // Initialize an array to hold the technical requirements
+    var techRequirementsArray = [];
+
+    // Translate each business requirement to a technical one
+    for (var i = 0; i < marketingRequirementsArray.length; i++) {
+        var businessRequirement = marketingRequirementsArray[i].trim();
+        if (businessRequirement !== "") {
+            // Example translation: "Business requirement" => "Technical requirement"
+            var technicalRequirement = "Technical version of: " + businessRequirement;
+            techRequirementsArray.push(technicalRequirement);
+        }
+    }
+
+    // Join the technical requirements array with line breaks
+    var translatedTechRequirements = techRequirementsArray.join("\n");
+
+    // Set the translated technical requirements in the textarea
+    document.getElementById('techRequirements').value = translatedTechRequirements;
+
+    // Show the diagram image
+    document.getElementById('diagram-image').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Comparison</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #FFD100;
+            color: #333333;
+        }
+        td {
+            vertical-align: middle;
+        }
+        .dot {
+            font-size: 24px;
+            color: #ffd100;
+        }
+        .good .dot {
+            color: green;
+        }
+        .average .dot {
+            color: orange;
+        }
+        .bad .dot {
+            color: red;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+        }
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+        nav .dropdown {
+            display: inline-block;
+        }
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        button {
+            background-color: #FFD100;
+            color: #333333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #333333;
+            color: #FFD100;
+        }
+    </style>
+</head>
+<body>
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+<div class="container">
+    <h2>Features Analysis</h2>
+    <form id="comparisonForm">
+        <table id="comparisonTable">
+            <thead>
+                <tr>
+                   <th>Feature / <input type="text" id="vendorInput" placeholder="..."></th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+     <button type="button" id="addFeatureButton">Add Feature</button>
+<button type="button" id="addVendorButton">Add<input type="text" id="vendorInput" placeholder="..."></button>
+<button type="button" id="downloadButton">Download Table</button>
+
+    </form>
+</div>
+
+<footer>
+    &copy; 2024 Product Marketing Team
+</footer>
+
+<script>
+    const form = document.getElementById('comparisonForm');
+    const table = document.getElementById('comparisonTable');
+    const downloadButton = document.getElementById('downloadButton');
+
+    form.addEventListener('input', function(event) {
+        const input = event.target;
+        if (input.type === 'number') {
+            const value = parseInt(input.value);
+            if (value >= 1 && value <= 3) {
+                const dots = '●'.repeat(value);
+                const cell = input.parentElement;
+                cell.textContent = '';
+                for (let i = 0; i < value; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    dot.textContent = '●';
+                    cell.appendChild(dot);
+                }
+            } else {
+                input.value = '';
+            }
+        }
+    });
+
+    addVendorButton.addEventListener('click', function() {
+        const vendorName = prompt('Enter variable name:');
+        if (vendorName) {
+            const headerRow = comparisonTable.querySelector('thead tr');
+            const newHeader = document.createElement('th');
+            newHeader.textContent = vendorName;
+            headerRow.appendChild(newHeader);
+
+            const rows = comparisonTable.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const newCell = document.createElement('td');
+                newCell.innerHTML = '<input type="number" min="1" max="3">';
+                row.appendChild(newCell);
+            });
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+    const comparisonForm = document.getElementById('comparisonForm');
+    const comparisonTable = document.getElementById('comparisonTable');
+    const addFeatureButton = document.getElementById('addFeatureButton');
+    const addVendorButton = document.getElementById('addVendorButton');
+    const downloadButton = document.getElementById('downloadButton');
+
+    // Add a new row for a feature
+    addFeatureButton.addEventListener('click', function() {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" name="featureName[]" placeholder="Enter feature name"></td>
+            <td><input type="number" name="vendor1[]" min="1" max="3"></td>
+            <!-- Additional vendor columns will be added dynamically -->
+        `;
+        comparisonTable.querySelector('tbody').appendChild(newRow);
+    });
+
+
+
+
+    // Download table as HTML file
+    downloadButton.addEventListener('click', function() {
+        const tableContent = comparisonTable.outerHTML;
+        const blob = new Blob([tableContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'vendor_comparison_table.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+    // Find the input element
+var vendorInput = document.getElementById('vendorInput');
+
+// Get the value entered by the user
+var vendorName = vendorInput.value;
+
+// Find the table header element
+var featureVendorHeader = document.querySelector('th');
+
+// Replace the placeholder with the entered vendor name
+featureVendorHeader.innerHTML = featureVendorHeader.innerHTML.replace('%VENDOR%', vendorName);
+
+});
+</script>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+

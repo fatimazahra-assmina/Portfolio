@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastweb Marketing Analysis - Market sizing</title>
+    <style>
+
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+                nav .dropdown {
+            display: inline-block;
+        }
+
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #inputForm,
+        #chartContainer {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        h2 {
+            color: #333333;
+        }
+
+        label {
+            color: #333333;
+            display: block;
+            margin: 10px 0;
+        }
+
+        input,
+        button {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            color: #333333;
+            width: 100%;
+        }
+
+        button {
+            background-color: #FFD100;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ffd100cc;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+    <section>
+        <div id="inputForm">
+            <h2>Marketing Research Input Form</h2>
+            <form id="marketingResearchForm">
+                <label for="productNameInput">Product Name:</label>
+                <input type="text" id="productNameInput" placeholder="Enter Product Name">
+                <label for="initialYearInput">Initial Year:</label>
+                <input type="number" id="initialYearInput" placeholder="Enter Initial Year">
+                <label for="initialMarketSizeInput">Initial Market Size:</label>
+                <input type="number" id="initialMarketSizeInput" placeholder="Enter Initial Market Size">
+                <label for="marketSizeUnitInput">Unit:</label>
+                <input type="text" id="marketSizeUnitInput" placeholder="Enter Unit (e.g., Billion Euros)">
+
+                <label for="cagrInput">CAGR:</label>
+                <input type="number" id="cagrInput" placeholder="Enter CAGR">
+             <label for="dataSourceInput">Data Source:</label>
+            <input type="text" id="dataSourceInput" placeholder="Enter Data Source">
+
+                <button type="button" onclick="updateChart()">Generate Chart</button>
+            </form>
+        </div>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="document" required>
+        <button type="submit">Upload</button>
+    </form>
+
+        <div id="chartContainer">
+            <h2>Marketing Research Chart</h2>
+            <canvas id="myChart"></canvas>
+              <div id="dataSourceDisplay"></div>
+            <button id="downloadButton">Download Chart</button>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2024 Fastweb Product Marketing Team
+    </footer>
+
+
+    <script>
+        var fastwebYellow = 'rgba(255, 196, 37, 0.6)';
+        var data = {
+            labels: [],
+            datasets: []
+        };
+
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Market Size'
+                    },
+                    ticks: {
+                        callback: function(value, index, values) {
+                            var unit = document.getElementById('marketSizeUnitInput').value || 'Billion Euros';
+                            return value.toLocaleString() + ' ' + unit;
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year'
+                    }
+                }
+            }
+        };
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            downloadChart();
+        });
+
+        async function updateChart() {
+            // Clear existing datasets
+            myChart.data.datasets = [];
+            myChart.update();
+
+            // Update the initial chart
+            var productName = document.getElementById('productNameInput').value || "Product A";
+            var initialYear = parseInt(document.getElementById('initialYearInput').value) || 2020;
+            var initialMarketSize = parseFloat(document.getElementById('initialMarketSizeInput').value) || 0;
+            var cagr = parseFloat(document.getElementById('cagrInput').value) || 0;
+            var dataSource = document.getElementById('dataSourceInput').value || "Unknown";
+
+            var years = 2026 - initialYear + 1;
+            data.labels = Array.from({ length: years }, (_, index) => (initialYear + index).toString());
+            var unit = document.getElementById('marketSizeUnitInput').value || 'Billion Euros';
+            options.scales.y.title.text = 'Market Size (' + unit + ')';
+
+            var newDataset = {
+                label: productName,
+                data: [],
+                borderColor: fastwebYellow,
+                borderWidth: 2,
+                fill: false
+            };
+
+            for (var i = initialYear; i <= 2026; i++) {
+                var size = initialMarketSize * Math.pow(1 + cagr / 100, i - initialYear);
+                newDataset.data.push(size);
+            }
+
+            myChart.data.datasets.push(newDataset);
+            myChart.update();
+
+            // Predict the market size for future years
+            var futureYears = Array.from({ length: 5 }, (_, index) => (2027 + index).toString());
+            var futureData = [];
+
+            // Machine learning code using TensorFlow.js
+            const model = tf.sequential({
+                layers: [tf.layers.dense({ units: 1, inputShape: [1] })]
+            });
+
+            model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
+
+            await model.fit(tf.tensor(data.labels, [data.labels.length, 1]), tf.tensor(data.datasets[0].data, [data.datasets[0].data.length, 1]), { epochs: 100 });
+
+            for (var i = 0; i < futureYears.length; i++) {
+                var size = model.predict(tf.tensor2d([parseInt(futureYears[i])], [1, 1])).dataSync()[0];
+                futureData.push(size);
+            }
+
+            // Add the predicted dataset to the initial chart
+            var predictedDataset = {
+                label: 'Predicted Data',
+                data: futureData,
+                borderColor: fastwebYellow,
+                borderWidth: 2,
+                fill: false
+            };
+
+            myChart.data.datasets.push(predictedDataset);
+
+            // Update the chart with the new datasets
+            myChart.update();
+        }
+
+        function downloadChart() {
+            var canvas = document.getElementById('myChart');
+            var dataURL = canvas.toDataURL('image/png');
+            var a = document.createElement('a');
+            a.href = dataURL;
+            a.download = 'marketing_research_chart.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        // Function to update the chart
+async function updateChart() {
+    // Clear existing datasets
+    myChart.data.datasets = [];
+    myChart.update();
+
+    // Update the initial chart
+    var productName = document.getElementById('productNameInput').value || "Product A";
+    var initialYear = parseInt(document.getElementById('initialYearInput').value) || 2020;
+    var initialMarketSize = parseFloat(document.getElementById('initialMarketSizeInput').value) || 0;
+    var cagr = parseFloat(document.getElementById('cagrInput').value) || 0;
+    var dataSource = document.getElementById('dataSourceInput').value || "Unknown";
+
+    var years = 2026 - initialYear + 1;
+    data.labels = Array.from({ length: years }, (_, index) => (initialYear + index).toString());
+    var unit = document.getElementById('marketSizeUnitInput').value || 'Billion Euros';
+    options.scales.y.title.text = 'Market Size (' + unit + ')';
+
+    var newDataset = {
+        label: productName,
+        data: [],
+        borderColor: fastwebYellow,
+        borderWidth: 2,
+        fill: false
+    };
+
+    for (var i = initialYear; i <= 2026; i++) {
+        var size = initialMarketSize * Math.pow(1 + cagr / 100, i - initialYear);
+        newDataset.data.push(size);
+    }
+
+    myChart.data.datasets.push(newDataset);
+    myChart.update();
+
+    // Update the content below the chart with the data source
+    var dataSourceDisplay = document.getElementById('dataSourceDisplay');
+    dataSourceDisplay.innerText = " Source: " + dataSource;
+    dataSourceDisplay.style.color = '#666'; // Set text color to grey
+    dataSourceDisplay.style.fontStyle = 'italic'; // Set font style to italic
+}
+
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  header {
+    background-color: #333;
+    color: #ffd100;
+    text-align: center;
+    padding: 15px 0;
+  }
+  nav {
+    background-color: #ffd100;
+    padding: 10px;
+    text-align: center;
+  }
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  section {
+    padding: 20px;
+    margin-bottom: 50px; /* Added margin to push footer down */
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #333;
+    color: #ffd100;
+  }
+  tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  footer {
+    background-color: #333333;
+    color: #FFD100;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  .timeline {
+    list-style-type: none;
+    padding: 0;
+    margin: 50px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 850px;
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    padding: 20px 0;
+  }
+  .event {
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative; /* Added */
+  }
+  .event::before,
+  .event::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    background-color: #ccc;
+    z-index: -1;
+  }
+  .event::before {
+    left: -22px;
+  }
+  .event::after {
+    right: -22px;
+  }
+  .event:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .subsection {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.event:hover .subsection {
+    display: block;
+}
+
+.subsection {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: none;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subsection li {
+    padding: 10px 20px;
+}
+
+.subsection li a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.subsection li a:hover {
+    color: #FFD100;
+}
+</style>
+</head>
+<body>
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+<section>
+    <h2>Product Conception Flow</h2>
+    <ul class="timeline">
+        <li class="event" onmouseover="showSubsection('brainstorming-info')" onmouseout="hideSubsection('brainstorming-info')">Brainstorming phase / ConnectHub
+            <ul id="brainstorming-info" class="subsection" style="display: none;">
+                <li><a href="generate_meetings">New meetings</a></li>
+                <li><a href="Brainstorming">History and ownership</a></li>
+                <!-- Add more options as needed -->
+            </ul>
+        </li>
+        <li class="event" onmouseover="showSubsection('market-sizing-info')" onmouseout="hideSubsection('market-sizing-info')">Marketing Analysis
+            <ul id="market-sizing-info" class="subsection" style="display: none;">
+                <li><a href="Market_sizing">Market sizing</a></li>
+                 <li><a href="longitudinal_analysis">General chart</a></li>
+                <li><a href="Competitive_analysis">Competitor analysis</a></li>
+                 <li><a href="Vendors_analysis">Vendors analysis</a></li>
+                <!-- Add more options as needed -->
+            </ul>
+        </li>
+               <li class="event" onmouseover="showSubsection('requirements-info')" onmouseout="hideSubsection('requirements-info')">Requirements
+            <ul id="requirements-info" class="subsection" style="display: none;">
+                <li><a href="Req_diag">Tech & Business Requirements</a></li>
+                <li><a href="Biz_req">Business requirements</a></li>
+
+                <!-- Add more options as needed -->
+            </ul>
+        </li>
+          <li class="event" onmouseover="showSubsection('finalconception-info')" onmouseout="hideSubsection('finalconception-info')">Final conception
+            <ul id="finalconception-info" class="subsection" style="display: none;">
+                <li><a href="Final_conception">Final product conception</a></li>
+                 <li><a href="/">P&L Analysis</a></li>
+
+                <!-- Add more options as needed -->
+            </ul>
+        </li>  <!-- Add more timeline events as needed -->
+    </ul>
+
+</section>
+
+<footer>
+    &copy; 2024 Fastweb Product Marketing Team
+</footer>
+
+<script>
+    function navigateToPage(pageUrl) {
+        window.location.href = pageUrl;
+    }
+    function showSubsection(subsectionId) {
+    var subsection = document.getElementById(subsectionId);
+    if (subsection) {
+        subsection.style.display = 'block';
+    }
+}
+
+function hideSubsection(subsectionId) {
+    var subsection = document.getElementById(subsectionId);
+    if (subsection) {
+        subsection.style.display = 'none';
+    }
+}
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+

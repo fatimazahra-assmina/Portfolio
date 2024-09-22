@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastweb Template</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background-color: #333333;
+            padding: 15px;
+            color: #FFD100;
+            text-align: center;
+        }
+        nav {
+            background-color: #FFD100;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+        nav .dropdown {
+            display: inline-block;
+        }
+
+        nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        nav .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav .dropdown-content a {
+            color: #333333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        section {
+            padding: 20px;
+            text-align: center; /* Center the content in the section */
+        }
+        footer {
+            background-color: #333333;
+            color: #FFD100;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+.news-section {
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+        }
+.latest-concepts {
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;  }
+        /* New style for the quote container */
+        #quote-container {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #555555;
+            background-image: url('fastweb_comic_background.jpg'); /* Replace 'fastweb_comic_background.jpg' with your image file */
+            background-size: cover;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* New style for the quote text */
+        #quote-of-the-day {
+            margin: 0;
+        }
+
+        /* New style for the quote title */
+        #quote-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #FFD100;
+        }
+
+        /* Style for flowchart canvas */
+        #flowchart-canvas {
+            margin-top: 20px;
+            border: 1px solid #333;
+            border-radius: 10px;
+        }
+              /* Style for news section */
+        .news-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .news-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .news-item a {
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        .news-item a:hover {
+            color: #FFD100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<header style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="{{ url_for('static', filename='Brainwave-logo.png') }}" alt="Chatbot Icon" style="width: 80px; height: 80px;">
+        <h1 style="display: inline-block; horizontal-align: middle;">BrainWave</h1>
+    </div>
+</header>
+
+
+     <nav>
+        <a href="Home_Page">Home Page</a>
+        <a href="Product_view">Concepts</a>
+        <div class="dropdown">
+            <a href="#">ConnectHub</a>
+            <div class="dropdown-content">
+                <a href="generate_meetings">New Meetings</a>
+                <a href="Brainstorming">History and ownership </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#">Marketing Analysis</a>
+            <div class="dropdown-content">
+                <a href="Market_sizing">Market Sizing</a>
+                <a href="longitudinal_analysis">General Chart</a>
+                <a href="Competitive_analysis">Competitor Analysis</a>
+                <a href="Vendors_analysis">Features Analysis</a>
+            </div>
+        </div>
+
+          <div class="dropdown">
+            <a href="#">Requirements</a>
+            <div class="dropdown-content">
+                <a href="Req_diag">Tech & Business requirements (Draft) </a>
+                <a href="Biz_req">Business requirements</a>
+            </div>
+        </div>
+          <div class="dropdown">
+            <a href="#">Final conception</a>
+            <div class="dropdown-content">
+                <a href="Final_conception">Final Product conception</a>
+                <a href="/">P&L Analysis </a>
+            </div>
+        </div>
+        <a href="creativity_area">Creativity Area</a>
+        <a href="Profile">Profile</a>
+    </nav>
+
+    <section>
+        <h2 style="margin-bottom: 10px;">Let's bring new products to life</h2>
+        <h3>Tu Sei Futuro</h3>
+        <p> BrainWave is an AI based platform that helps you bring together all the products'stakeholders to make the concepting of a new product more efficient, smarter and easier. <p>
+         <img src="{{ url_for('static', filename='conception-flow-pic.png') }}" alt="Chatbot Icon" style="width: 1000px; ;">
+        <!-- Quote container -->
+        <div id="quote-container">
+            <p id="quote-title"> Quote of the Day</p>
+            <p id="quote-of-the-day"></p>
+        </div>
+  <!-- News Section -->
+        <div class="news-section">
+            <h3>Latest Events </h3>
+            <div class="news-item">
+                <a href="https://agora.fastweb.it/news/rapporto-clusit-2024-la-cybersecurity-italia">Participation of Fastweb in the Security Summit 2024</a>
+            </div>
+            <div class="news-item">
+                <a href="https://agora.fastweb.it/news/nasce-fastweb-energia-partecipa-streaming-alla-conferenza-stampa">Fastweb Energia is born!</a>
+            </div>
+            <!-- Add more news items as needed -->
+        </div>
+        <h3>
+
+        </h3>
+         <div>
+         </div>
+<div class="latest-concepts">
+        <h3>Latest Concepts </h3>
+        <p>Here are the latest concepts linked to the newest products:</p>
+       <ul>
+            <h5><a href="Product_view#row1">Mobile Security</a></h5>
+            <h5><a href="Product_view#row2">DefenderAI</a></h5>
+            <!-- Replace "another_page.html" with the actual URL of the page containing the target rows -->
+            <!-- Replace "#row1" and "#row2" with the IDs of the rows you want to link to -->
+            <!-- Add more concepts as needed -->
+        </ul>
+    </div>
+    <footer>
+        &copy; 2024 Fastweb Product Marketing Team
+    </footer>
+
+</div>
+
+<script>
+    // Array of quotes
+    var quotes = [
+"The only way to do great work is to love what you do. - Steve Jobs",
+        "The only way to do great work is to love what you do. - Steve Jobs",
+            "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
+  "The only way to do great work is to love what you do. - Steve Jobs",
+"Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+"Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
+"Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. - Steve Jobs",
+"Success is stumbling from failure to failure with no loss of enthusiasm.- Winston S. Churchill",
+"The only place where success comes before work is in the dictionary. - Vidal Sassoon",
+"Believe you can and you're halfway there. - Theodore Roosevelt",
+"Success usually comes to those who are too busy to be looking for it. - Henry David Thoreau",
+"Hard work beats talent when talent doesn't work hard.- Tim Notke",
+"The future depends on what you do today.- Mahatma Gandhi",
+"Your work is discoverable proof of your passion. - Chris Gardner",
+"The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+"The way to get started is to quit talking and begin doing. - Walt Disney",
+"It always seems impossible until it's done. - Nelson Mandela",
+"Success is not in what you have, but who you are.- Bo Bennett",
+"Don’t be pushed around by the fears in your mind. Be led by the dreams in your heart. - Roy T. Bennett",
+"The only place success comes before work is in the dictionary. - Vidal Sassoon",
+"Don’t watch the clock; do what it does. Keep going.- Sam Levenson",
+"Success is walking from failure to failure with no loss of enthusiasm. - Winston S. Churchill",
+"Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston S. Churchill",
+"The best way to predict the future is to create it. - Peter Drucker",
+"It's not whether you get knocked down, it's whether you get up. - Vince Lombardi",
+"What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar",
+"You are never too old to set another goal or to dream a new dream. - C.S. Lewis",
+"If you are working on something that you really care about, you don't have to be pushed. The vision pulls you.- Steve Jobs",
+"Don't be afraid to give up the good to go for the great. - John D. Rockefeller",
+"Success is no accident. It is hard work, perseverance, learning, studying, sacrifice, and most of all, love of what you are doing or learning to do.- Pelé",
+"The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
+"Success is walking from failure to failure with no loss of enthusiasm. - Winston S. Churchill",
+"The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+"Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. - Steve Jobs",
+"The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
+"I find that the harder I work, the more luck I seem to have.- Thomas Jefferson",
+"Don't be afraid to give up the good to go for the great. - John D. Rockefeller",
+"It's not about how hard you hit. It's about how hard you can get hit and keep moving forward.- Rocky Balboa",
+"Believe you can and you're halfway there.- Theodore Roosevelt",
+"The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+"The only way to achieve the impossible is to believe it is possible. - Charles Kingsleigh",
+"Work hard in silence, let your success be your noise. - Frank Ocean",
+"The only place success comes before work is in the dictionary. - Vidal Sassoon",
+"Success is the sum of small efforts, repeated day in and day out. - Robert Collier",
+"If you want to achieve greatness stop asking for permission. - Anonymous",
+"Success is not final, failure is not fatal: It is the courage to continue that counts.- Winston S. Churchill",
+"Opportunities don't happen. You create them. - Chris Grosser",
+"I find that the harder I work, the more luck I seem to have. - Thomas Jefferson",
+"Success is not in what you have, but who you are.- Bo Bennett",
+"Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston S. Churchill",
+"It does not matter how slowly you go as long as you do not stop. - Confucius",
+"Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.- Roy T. Bennett",
+"Don't be afraid to give up the good to go for the great. - John D. Rockefeller",
+
+    ];
+
+    // Function to get a random quote
+    function getRandomQuote() {
+        return quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    // Display a random quote when the page is loaded
+    document.getElementById("quote-of-the-day").innerHTML = getRandomQuote();
+
+    // Your flowchart drawing code can be added here
+    var canvas = document.getElementById('flowchart-canvas');
+    var ctx = canvas.getContext('2d');
+
+    // Draw a rectangle
+    ctx.fillStyle = "#FFD100"; // Fill color
+    ctx.fillRect(50, 50, 200, 100); // (x, y, width, height)
+
+    // Draw text inside the rectangle
+    ctx.fillStyle = "#FFFFFF"; // Text color
+    ctx.font = "20px Arial";
+    ctx.fillText("Start", 110, 110); // (text, x, y)
+</script>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Pop-up</title>
+<style>
+/* Styles for chatbot pop-up */
+#chat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+#chat-header {
+  background-color: #FFD100;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+#chat-input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 5px;
+}
+
+#chat-submit {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 5px;
+  background-color: #FFD100;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for chatbot icon */
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #FFD100;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+</head>
+<body>
+
+<!-- Chatbot container -->
+<div id="chat-container">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px; margin-right: 10px;">NeXXt AI
+  </div>
+  <div id="chat-body">
+    <p>Welcome to BrainWave!</p>
+    <p>How can I assist you today?</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type your message...">
+  <button id="chat-submit">Send</button>
+</div>
+
+<!-- Chatbot icon -->
+<div class="chat-icon" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='chatbot icon.png') }}" alt="Chatbot Icon" style="width: 40px; height: 40px;">
+</div>
+
+<script>
+// Function to toggle chatbot visibility
+function toggleChat() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.style.display = (chatContainer.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
+
+
